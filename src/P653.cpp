@@ -1,0 +1,33 @@
+#include "TreeNode.h"
+#include <vector>
+
+using namespace std;
+
+class Solution {
+public:
+    bool findTarget(TreeNode *root, int k) {
+        vector<int> nums;
+        inorder(root, nums);
+        int low = 0, high = (int) nums.size() - 1;
+        while (low < high) {
+            int sum = nums[low] + nums[high];
+            if (sum == k) {
+                return true;
+            } else if (sum < k) {
+                low++;
+            } else {
+                high--;
+            }
+        }
+        return false;
+    }
+
+    void inorder(TreeNode *root, vector<int> &nums) {
+        if (!root) {
+            return;
+        }
+        inorder(root->left, nums);
+        nums.push_back(root->val);
+        inorder(root->right, nums);
+    }
+};
