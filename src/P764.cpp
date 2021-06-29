@@ -8,10 +8,9 @@ public:
     using VVI = vector<vector<int>>;
 
     int orderOfLargestPlusSign(int n, vector<vector<int>> &mines) {
-        const int INF = 1e8;
         VVI grid(n, VI(n, 1));
         for (auto &m : mines) grid[m[0]][m[1]] = 0;
-        VVI f(n, VI(n, INF));
+        VVI f(n, VI(n));
         for (int i = 0; i < n; i++) {
             for (int j = 0, s = 0; j < n; j++) {
                 if (grid[i][j]) s++; else s = 0;
