@@ -20,22 +20,18 @@ public:
 
     bool check(int mid) {
         cnt.clear(), s.clear();
-        p[0] = 1;
-        int k = 0;
-        for (auto &str : _paths) {
-            int n = (int) str.size();
-            for (int i = 1; i <= n; i++) {
-                p[i] = p[i - 1] * P;
-                h[i] = h[i - 1] * P + str[i - 1];
+        for (int i = 0; i < _paths.size(); i++) {
+            int n = (int) _paths[i].size();
+            for (int j = 1; j <= n; j++) {
+                h[j] = h[j - 1] * P + _paths[i][j - 1];
             }
-            for (int i = mid; i <= n; i++) {
-                ULL t = get(i - mid + 1, i);
-                if (!s.count(t) || s[t] != k) {
-                    s[t] = k;
+            for (int j = mid; j <= n; j++) {
+                ULL t = get(j - mid + 1, j);
+                if (!s.count(t) || s[t] != i) {
+                    s[t] = i;
                     cnt[t]++;
                 }
             }
-            k++;
         }
         int res = 0;
         for (auto &[k, v] : cnt) res = max(res, v);
@@ -45,9 +41,9 @@ public:
     int longestCommonSubpath(int n, vector<vector<int>> &paths) {
         _paths = paths;
         int l = 0, r = N;
-        for (auto &path : paths) {
-            r = min(r, (int) path.size());
-        }
+        for (auto &path : paths) r = min(r, (int) path.size());
+        p[0] = 1;
+        for (int i = 1; i < N; i++) p[i] = p[i - 1] * P;
         while (l < r) {
             int mid = l + (r - l + 1) / 2;
             if (check(mid)) l = mid;
