@@ -9,15 +9,17 @@ public:
         int n = mat.size(), m = mat[0].size();
         vector<vector<int>> f(n, vector<int>(m));
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; ++j) {
-                if (mat[i][j]) f[i][j] = 1;
-                if (i) f[i][j] += f[i - 1][j];
+            for (int j = 0; j < m; j++) {
+                if (mat[i][j]) {
+                    f[i][j] = 1;
+                    if (i) f[i][j] += f[i - 1][j];
+                }
             }
         }
         int res = 0;
-        for (int i = 0; i < n; ++i) {
+        for (int i = 0; i < n; i++) {
             stack<pair<int, int>> stk;
-            for (int j = 0; j < m; ++j) {
+            for (int j = 0; j < m; j++) {
                 while (!stk.empty() && f[i][stk.top().first] >= f[i][j]) stk.pop();
                 int s = 0;
                 if (!stk.empty()) {

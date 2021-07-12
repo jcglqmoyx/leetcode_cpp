@@ -1,36 +1,25 @@
-#include <vector>
+#include <string>
 
 using namespace std;
 
 class Solution {
 public:
-    int get_time(vector<int> &p, vector<int> &q) {
-        return (abs(p[0] - q[0]) + abs(p[1] - q[1]) + 1) / 2;
-    }
-
-    int minDayskVariants(vector<vector<int>> &points, int k) {
-        int n = (int) points.size();
-        vector<vector<int>> time(n, vector<int>(n));
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = i + 1; j < n; j++) {
-                time[i][j] = get_time(points[i], points[j]);
-            }
+    bool sumGame(string num) {
+        int n = (int) num.size();
+        int l = 0, r = 0, cnt1 = 0, cnt2 = 0;
+        for (int i = 0; i < n / 2; i++) {
+            if (num[i] != '?') l += num[i] - '0';
+            else cnt1++;
+            if (num[i + n / 2] != '?') r += num[i + n / 2] - '0';
+            else cnt2++;
         }
-        int res = 1e9;
-        for (int status = 0; status < 1 << n; status++) {
-            if (__builtin_popcount(status) != k) continue;
-            int cur = 0;
-            for (int i = 0; i < n; i++) {
-                if (status >> i & 1) {
-                    for (int j = i + 1; j < n; j++) {
-                        if (status >> j & 1) {
-                            cur = max(cur, time[i][j]);
-                        }
-                    }
-                }
-            }
-            res = min(res, cur);
-        }
-        return res;
+        if (cnt1 == 0 && cnt2 == 0) return l != r;
+        if (l == r) return cnt1 != cnt2;
+        if (l < r && cnt1 <= cnt2) return true;
+        if (l > r && cnt1 >= cnt2) return true;
+        if (l + (cnt1 + 1) / 2 * 9 > r + (cnt2 + 1) / 2 * 9) return true;
+        if (l + (cnt1 + 1) / 2 * 9 < r + (cnt2 + 1) / 2 * 9) return true;
+        if (abs(l - r) <= 9 && abs(cnt1 - cnt2) <= 1) return true;
+        return false;
     }
 };
